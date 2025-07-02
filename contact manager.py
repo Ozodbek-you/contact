@@ -1,107 +1,106 @@
 # import re
 #
-# contacts = {}
+# class Contact:
+#     def __init__(self, name, phone):
+#         self.name = name
+#         self.phone = phone
 #
+# class ContactManager:
+#     def __init__(self):
+#         self.contacts = []
 #
-# def first_name(name):
-#     code = r"^[A-Za-z]{2,20}$"
-#     return re.match(code, name)
+#     def is_valid_phone(self, phone):
+#         pattern = r'^(\+998|998)[0-9]{9}$'
+#         return re.match(pattern, phone)
 #
-# def phone_number(phone):
-#     code = r"^\+998\d{9}$"
-#     return re.match(code, phone)
-#
-#
-# def add_contact():
-#     name = input("Ismni kiriting (faqat lotin harflari): ").strip()
-#     if not first_name(name):
-#         print("Ism noto‘g‘ri formatda. Qaytadan urinib ko‘ring.\n")
-#         return
-#
-#     phone = input("Telefon raqamini kiriting (+998XXXXXXXXX): ").strip()
-#     if not phone_number(phone):
-#         print("Telefon raqami noto‘g‘ri formatda. Qaytadan urinib ko‘ring.\n")
-#         return
-#
-#     contacts[name] = phone
-#     print(f"{name} kontakti qo‘shildi.\n")
-#
-#
-# def view_contact():
-#     name = input("Ismni kiriting: ").strip()
-#     if name in contacts:
-#         print(f"{name} raqami: {contacts[name]}\n")
-#     else:
-#         print("Bunday kontakt mavjud emas.\n")
-#
-#
-# def delete_contact():
-#     name = input("O‘chirmoqchi bo‘lgan ismingizni kiriting: ").strip()
-#     if name in contacts:
-#         del contacts[name]
-#         print(f"{name} kontakti o‘chirildi.\n")
-#     else:
-#         print("Bunday ism topilmadi.\n")
-#
-#
-# def main():
-#     while True:
-#         print("=== Kontakt Menejeri ===")
-#         print("1. Kontakt qo‘shish")
-#         print("2. Kontaktni ko‘rish")
-#         print("3. Kontaktni o‘chirish")
-#         print("0. Chiqish\n")
-#
-#         kod = input("Tanlang: ").strip()
-#
-#         if kod == '1':
-#             add_contact()
-#         elif kod == '2':
-#             view_contact()
-#         elif kod == '3':
-#
-#
-#             delete_contact()
-#         elif kod == '0':
-#             print("Dasturni yakunladingiz.")
-#             break
+#     def add_contact(self, name, phone):
+#         if self.is_valid_phone(phone):
+#             self.contacts.append(Contact(name, phone))
+#             print(f" {name} ({phone}) kontaktga qo‘shildi.")
 #         else:
-#             print("Noto‘g‘ri tanlov. Qaytadan urinib ko‘ring.\n")
+#             print(" Noto‘g‘ri raqam formati!")
+#
+#     def get_contact_by_phone(self, phone):
+#         for contact in self.contacts:
+#             if contact.phone == phone:
+#                 return contact
+#         return None
+#
+#     def show_contacts(self):
+#         print("\nKontaktlar ro‘yxati:")
+#         if not self.contacts:
+#             print(" - Kontakt qo‘shilmagan.")
+#         else:
+#             for contact in self.contacts:
+#                 print(f" + {contact.name}: {contact.phone}")
+#
+#
+# class SMSManager:
+#     def __init__(self, contact_manager):
+#         self.contact_manager = contact_manager
+#         self.sms_history = []
+#
+#     def send_sms(self, phone, message):
+#         if not self.contact_manager.is_valid_phone(phone):
+#             print(" Noto‘g‘ri raqam formati!")
+#             return
+#         contact = self.contact_manager.get_contact_by_phone(phone)
+#         if contact:
+#             self.sms_history.append({'to': phone, 'message': message})
+#             print(f" SMS {contact.name} ({phone}) ga yuborildi.")
+#         else:
+#             print(" Bu raqam kontaktlar ro‘yxatida yo‘q!")
+#
+# class App:
+#     def __init__(self):
+#         self.contact_manager = ContactManager()
+#         self.sms_manager = SMSManager(self.contact_manager)
+#
+#     def run(self):
+#         while True:
+#             print("\n Dasturga xush kelibsiz!")
+#             print("1. Kontakt Menejer")
+#             print("2. SMS Menejer")
+#             print("3. Kontaktlar ro‘yxatini ko‘rish")
+#             print("4. Chiqish")
+#             choice = input("Tanlang (1/2/3/4): ")
+#
+#             if choice == '1':
+#                 self.run_contact_manager()
+#             elif choice == '2':
+#                 self.run_sms_manager()
+#             elif choice == '3':
+#                 self.contact_manager.show_contacts()
+#             elif choice == '4':
+#                 print(" Chiqildi.")
+#                 break
+#             else:
+#                 print(" Noto‘g‘ri tanlov!")
+#
+#     def run_contact_manager(self):
+#         while True:
+#             print("\n--- Kontakt Menejer ---")
+#             name = input("Ism kiriting (yoki 'chiqish'): ")
+#             if name.lower() == 'chiqish':
+#                 break
+#             phone = input("Telefon raqami kiriting (+998...): ")
+#             self.contact_manager.add_contact(name, phone)
+#
+#
+#
+#     def run_sms_manager(self):
+#         if not self.contact_manager.contacts:
+#             print(" Avval kontakt qo‘shing.")
+#             return
+#         while True:
+#             print("\n--- SMS Menejer ---")
+#             phone = input("Telefon raqami (yoki 'chiqish'): ")
+#             if phone.lower() == 'chiqish':
+#                 break
+#             message = input("SMS matnini yozing: ")
+#             self.sms_manager.send_sms(phone, message)
 #
 #
 # if __name__ == "__main__":
-#     main()
-
-
-
-
-
-
-import time
-
-
-def log_info(func):
-    def wrapper(*args, **kwargs):
-        print(f"\n Funksiya: {func.__name__}")
-        print(" Argumentlar:")
-        for arg in args:
-            print(f"  - Qiymat: {arg} | Turi: {type(arg)}")
-        for key, value in kwargs.items():
-            print(f"  - {key} = {value} | Turi: {type(value)}")
-
-        start = time.time()
-        result = func(*args, **kwargs)
-        end = time.time()
-
-        duration = end - start
-        print(f" Vaqt: {duration:.6f} soniya")
-        return result
-
-    return wrapper
-
-@log_info
-def add_contact(name, phone):
-    print(f" {name} kontakti qo‘shildi.")
-
-if __name__ == "__main__":
-    add_contact("Ali", "+998901234567")
+#     app = App()
+#     app.run()
